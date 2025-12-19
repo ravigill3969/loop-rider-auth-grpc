@@ -1,0 +1,61 @@
+syntax = "proto3";
+package rider_auth;
+option go_package = ".;proto";
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (AuthResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc GetRiderDetails(GetRiderDetailsRequest) returns (GetRiderDetailsResponse);
+}
+
+message RegisterRequest { User user = 1; }
+
+message User {
+  string email = 1;
+  string full_name = 2;
+  string password = 3;
+  string phone_number = 4;
+  string birth_month = 5;
+  int64 birth_year = 6;
+  int64 updated_at = 7;
+  int64 created_at = 8;
+  string id = 9;
+}
+
+message AuthResponse {
+  string message = 1;
+  int64 status = 2;
+  User user = 3;
+  Tokens token = 4;
+  bool success = 5;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string message = 1;
+  int64 status = 2;
+  User user = 3;
+  Tokens token = 4;
+  bool success = 5;
+}
+
+message GetRiderDetailsRequest {
+  string id = 1;
+}
+
+message GetRiderDetailsResponse {
+  string message = 1;
+  int64 status = 2;
+  User user = 3;
+  bool success = 4;
+}
+
+message Tokens {
+  string access_token = 1;
+  string refresh_token = 2;
+  string token_type = 3; // e.g., "Bearer"
+}

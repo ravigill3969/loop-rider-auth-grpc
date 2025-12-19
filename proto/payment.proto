@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package payment;
+option go_package = ".;proto";
+
+service PaymentService {
+  rpc CreateCheckOutSession(CreateCheckOutSessionRequest)
+      returns (CreateCheckOutSessionResponse);
+}
+
+message Coordinates {
+  double lat = 1;
+  double lng = 2;
+}
+
+message PaymentError {
+  int32 code = 1;
+  string message = 2;
+  string stripe_code = 3;
+}
+
+message CreateCheckOutSessionRequest {
+  string rider_id = 1;
+  string rider_name =9;
+  int32 rider_age  =10;
+  string gender = 11;
+
+  string pickup_location = 3;
+  string dropoff_location = 4;
+
+  float estimated_price = 2;
+  float estimated_distance_km = 5;
+  int64 estimated_duration_min = 6;
+
+  Coordinates dropoff_coords_lat_lng = 7;
+  Coordinates pickup_coords_lat_lng = 8;
+}
+
+message CreateCheckOutSessionResponse {
+  bool success = 1;
+
+  string checkout_url = 2;
+  string session_id = 3;
+  string payment_intent_id = 4;
+
+  string status = 5;
+
+  PaymentError error = 6;
+}
