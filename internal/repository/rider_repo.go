@@ -19,7 +19,7 @@ func NewUserRepo(db *sql.DB) *UserRepo {
 }
 
 func (r *UserRepo) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
-	query := `INSERT INTO users (id, email, full_name, password, phone_number, birth_month, birth_year, updated_at, created_at) 
+	query := `INSERT INTO users (id, email, full_name, password, phone_number, birth_month, birth_year, updated_at, created_at)
 			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`
 
 	user.CreatedAt = time.Now().Unix()
@@ -39,6 +39,7 @@ func (r *UserRepo) GetUserByEmail(ctx context.Context, email string) (*models.Us
 
 	var user models.User
 	err := row.Scan(&user.ID, &user.Email, &user.FullName, &user.Password, &user.PhoneNumber, &user.BirthMonth, &user.BirthYear, &user.UpdatedAt, &user.CreatedAt)
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil

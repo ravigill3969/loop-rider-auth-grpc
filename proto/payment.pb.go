@@ -341,6 +341,126 @@ func (x *CreateCheckOutSessionResponse) GetError() *PaymentError {
 	return nil
 }
 
+type CapturePaymentHandlerRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PaymentId     string                 `protobuf:"bytes,1,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	PaymentAmount int32                  `protobuf:"varint,2,opt,name=payment_amount,json=paymentAmount,proto3" json:"payment_amount,omitempty"`
+	TripId        string                 `protobuf:"bytes,3,opt,name=trip_id,json=tripId,proto3" json:"trip_id,omitempty"`
+	RiderId       string                 `protobuf:"bytes,4,opt,name=rider_id,json=riderId,proto3" json:"rider_id,omitempty"`
+	DriverId      string                 `protobuf:"bytes,5,opt,name=driver_id,json=driverId,proto3" json:"driver_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CapturePaymentHandlerRequest) Reset() {
+	*x = CapturePaymentHandlerRequest{}
+	mi := &file_payment_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CapturePaymentHandlerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CapturePaymentHandlerRequest) ProtoMessage() {}
+
+func (x *CapturePaymentHandlerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_payment_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CapturePaymentHandlerRequest.ProtoReflect.Descriptor instead.
+func (*CapturePaymentHandlerRequest) Descriptor() ([]byte, []int) {
+	return file_payment_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CapturePaymentHandlerRequest) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+func (x *CapturePaymentHandlerRequest) GetPaymentAmount() int32 {
+	if x != nil {
+		return x.PaymentAmount
+	}
+	return 0
+}
+
+func (x *CapturePaymentHandlerRequest) GetTripId() string {
+	if x != nil {
+		return x.TripId
+	}
+	return ""
+}
+
+func (x *CapturePaymentHandlerRequest) GetRiderId() string {
+	if x != nil {
+		return x.RiderId
+	}
+	return ""
+}
+
+func (x *CapturePaymentHandlerRequest) GetDriverId() string {
+	if x != nil {
+		return x.DriverId
+	}
+	return ""
+}
+
+type CapturePaymentHandlerResposne struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CapturePaymentHandlerResposne) Reset() {
+	*x = CapturePaymentHandlerResposne{}
+	mi := &file_payment_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CapturePaymentHandlerResposne) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CapturePaymentHandlerResposne) ProtoMessage() {}
+
+func (x *CapturePaymentHandlerResposne) ProtoReflect() protoreflect.Message {
+	mi := &file_payment_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CapturePaymentHandlerResposne.ProtoReflect.Descriptor instead.
+func (*CapturePaymentHandlerResposne) Descriptor() ([]byte, []int) {
+	return file_payment_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CapturePaymentHandlerResposne) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
 var File_payment_proto protoreflect.FileDescriptor
 
 const file_payment_proto_rawDesc = "" +
@@ -375,9 +495,19 @@ const file_payment_proto_rawDesc = "" +
 	"session_id\x18\x03 \x01(\tR\tsessionId\x12*\n" +
 	"\x11payment_intent_id\x18\x04 \x01(\tR\x0fpaymentIntentId\x12\x16\n" +
 	"\x06status\x18\x05 \x01(\tR\x06status\x12+\n" +
-	"\x05error\x18\x06 \x01(\v2\x15.payment.PaymentErrorR\x05error2x\n" +
+	"\x05error\x18\x06 \x01(\v2\x15.payment.PaymentErrorR\x05error\"\xb5\x01\n" +
+	"\x1cCapturePaymentHandlerRequest\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x01 \x01(\tR\tpaymentId\x12%\n" +
+	"\x0epayment_amount\x18\x02 \x01(\x05R\rpaymentAmount\x12\x17\n" +
+	"\atrip_id\x18\x03 \x01(\tR\x06tripId\x12\x19\n" +
+	"\brider_id\x18\x04 \x01(\tR\ariderId\x12\x1b\n" +
+	"\tdriver_id\x18\x05 \x01(\tR\bdriverId\"7\n" +
+	"\x1dCapturePaymentHandlerResposne\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status2\xe0\x01\n" +
 	"\x0ePaymentService\x12f\n" +
-	"\x15CreateCheckOutSession\x12%.payment.CreateCheckOutSessionRequest\x1a&.payment.CreateCheckOutSessionResponseB\tZ\a.;protob\x06proto3"
+	"\x15CreateCheckOutSession\x12%.payment.CreateCheckOutSessionRequest\x1a&.payment.CreateCheckOutSessionResponse\x12f\n" +
+	"\x15CapturePaymentHandler\x12%.payment.CapturePaymentHandlerRequest\x1a&.payment.CapturePaymentHandlerResposneB\tZ\a.;protob\x06proto3"
 
 var (
 	file_payment_proto_rawDescOnce sync.Once
@@ -391,21 +521,25 @@ func file_payment_proto_rawDescGZIP() []byte {
 	return file_payment_proto_rawDescData
 }
 
-var file_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_payment_proto_goTypes = []any{
 	(*Coordinates)(nil),                   // 0: payment.Coordinates
 	(*PaymentError)(nil),                  // 1: payment.PaymentError
 	(*CreateCheckOutSessionRequest)(nil),  // 2: payment.CreateCheckOutSessionRequest
 	(*CreateCheckOutSessionResponse)(nil), // 3: payment.CreateCheckOutSessionResponse
+	(*CapturePaymentHandlerRequest)(nil),  // 4: payment.CapturePaymentHandlerRequest
+	(*CapturePaymentHandlerResposne)(nil), // 5: payment.CapturePaymentHandlerResposne
 }
 var file_payment_proto_depIdxs = []int32{
 	0, // 0: payment.CreateCheckOutSessionRequest.dropoff_coords_lat_lng:type_name -> payment.Coordinates
 	0, // 1: payment.CreateCheckOutSessionRequest.pickup_coords_lat_lng:type_name -> payment.Coordinates
 	1, // 2: payment.CreateCheckOutSessionResponse.error:type_name -> payment.PaymentError
 	2, // 3: payment.PaymentService.CreateCheckOutSession:input_type -> payment.CreateCheckOutSessionRequest
-	3, // 4: payment.PaymentService.CreateCheckOutSession:output_type -> payment.CreateCheckOutSessionResponse
-	4, // [4:5] is the sub-list for method output_type
-	3, // [3:4] is the sub-list for method input_type
+	4, // 4: payment.PaymentService.CapturePaymentHandler:input_type -> payment.CapturePaymentHandlerRequest
+	3, // 5: payment.PaymentService.CreateCheckOutSession:output_type -> payment.CreateCheckOutSessionResponse
+	5, // 6: payment.PaymentService.CapturePaymentHandler:output_type -> payment.CapturePaymentHandlerResposne
+	5, // [5:7] is the sub-list for method output_type
+	3, // [3:5] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -422,7 +556,7 @@ func file_payment_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_payment_proto_rawDesc), len(file_payment_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

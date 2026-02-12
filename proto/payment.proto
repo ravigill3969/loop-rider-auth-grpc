@@ -1,11 +1,13 @@
 syntax = "proto3";
 
 package payment;
+
 option go_package = ".;proto";
 
 service PaymentService {
-  rpc CreateCheckOutSession(CreateCheckOutSessionRequest)
-      returns (CreateCheckOutSessionResponse);
+  rpc CreateCheckOutSession(CreateCheckOutSessionRequest) returns (CreateCheckOutSessionResponse);
+
+  rpc CapturePaymentHandler(CapturePaymentHandlerRequest) returns (CapturePaymentHandlerResposne);
 }
 
 message Coordinates {
@@ -21,8 +23,8 @@ message PaymentError {
 
 message CreateCheckOutSessionRequest {
   string rider_id = 1;
-  string rider_name =9;
-  int32 rider_age  =10;
+  string rider_name = 9;
+  int32 rider_age = 10;
   string gender = 11;
 
   string pickup_location = 3;
@@ -46,4 +48,16 @@ message CreateCheckOutSessionResponse {
   string status = 5;
 
   PaymentError error = 6;
+}
+
+message CapturePaymentHandlerRequest {
+  string payment_id = 1;
+  int32 payment_amount = 2;
+  string trip_id = 3;
+  string rider_id = 4;
+  string driver_id = 5;
+}
+
+message CapturePaymentHandlerResposne {
+  bool status = 1;
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -13,7 +14,7 @@ import (
 	"ravigill/rider-grpc-server/internal/service"
 	pb "ravigill/rider-grpc-server/proto"
 
-	"github.com/loop/backend/rider-auth/lib/middleware"
+	middleware "ravigill/loop-auth-utils"
 )
 
 type RiderServer struct {
@@ -24,7 +25,7 @@ func main() {
 	err := config.LoadENV()
 
 	if err != nil {
-		log.Fatalf(".env not loaded: %v", err)
+		fmt.Printf(".env not loaded: %v\n", err)
 	}
 
 	PORT := os.Getenv("PORT")
@@ -54,8 +55,15 @@ func main() {
 		log.Fatal("ACCESS_TOKEN_SECRET_KEY environment variable is required")
 	}
 
+	// /<proto_package>.<ServiceName>/<MethodName>
+
+	publicEndpoints := map[string]bool{
+		"/rider_auth.AuthService/Register": true,
+		"/rider_auth.AuthService/Login":    true,
+	}
+
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(middleware.AuthInterceptor(secretKey)),
+		grpc.UnaryInterceptor(middleware.AuthInterceptor(publicEndpoints, secretKey)),
 	)
 
 	pb.RegisterAuthServiceServer(grpcServer, authService)

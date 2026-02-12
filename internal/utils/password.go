@@ -10,21 +10,8 @@ func HashPassword(password string) (string, error) {
 }
 
 func CheckPassword(password, hash string) bool {
-	// Debug logging
-	println("=== CheckPassword Debug ===")
-	println("Plaintext password:", password)
-	println("Password length:", len(password))
-	println("Hash from DB:", hash)
-	println("Hash length:", len(hash))
 
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-
-	if err != nil {
-		println("Error:", err.Error())
-	} else {
-		println("Password match: SUCCESS")
-	}
-	println("===========================")
 
 	return err == nil
 }

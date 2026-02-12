@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	PaymentService_CreateCheckOutSession_FullMethodName = "/payment.PaymentService/CreateCheckOutSession"
+	PaymentService_CapturePaymentHandler_FullMethodName = "/payment.PaymentService/CapturePaymentHandler"
 )
 
 // PaymentServiceClient is the client API for PaymentService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PaymentServiceClient interface {
 	CreateCheckOutSession(ctx context.Context, in *CreateCheckOutSessionRequest, opts ...grpc.CallOption) (*CreateCheckOutSessionResponse, error)
+	CapturePaymentHandler(ctx context.Context, in *CapturePaymentHandlerRequest, opts ...grpc.CallOption) (*CapturePaymentHandlerResposne, error)
 }
 
 type paymentServiceClient struct {
@@ -47,11 +49,22 @@ func (c *paymentServiceClient) CreateCheckOutSession(ctx context.Context, in *Cr
 	return out, nil
 }
 
+func (c *paymentServiceClient) CapturePaymentHandler(ctx context.Context, in *CapturePaymentHandlerRequest, opts ...grpc.CallOption) (*CapturePaymentHandlerResposne, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CapturePaymentHandlerResposne)
+	err := c.cc.Invoke(ctx, PaymentService_CapturePaymentHandler_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentServiceServer is the server API for PaymentService service.
 // All implementations must embed UnimplementedPaymentServiceServer
 // for forward compatibility.
 type PaymentServiceServer interface {
 	CreateCheckOutSession(context.Context, *CreateCheckOutSessionRequest) (*CreateCheckOutSessionResponse, error)
+	CapturePaymentHandler(context.Context, *CapturePaymentHandlerRequest) (*CapturePaymentHandlerResposne, error)
 	mustEmbedUnimplementedPaymentServiceServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedPaymentServiceServer struct{}
 
 func (UnimplementedPaymentServiceServer) CreateCheckOutSession(context.Context, *CreateCheckOutSessionRequest) (*CreateCheckOutSessionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCheckOutSession not implemented")
+}
+func (UnimplementedPaymentServiceServer) CapturePaymentHandler(context.Context, *CapturePaymentHandlerRequest) (*CapturePaymentHandlerResposne, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CapturePaymentHandler not implemented")
 }
 func (UnimplementedPaymentServiceServer) mustEmbedUnimplementedPaymentServiceServer() {}
 func (UnimplementedPaymentServiceServer) testEmbeddedByValue()                        {}
@@ -104,6 +120,24 @@ func _PaymentService_CreateCheckOutSession_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentService_CapturePaymentHandler_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CapturePaymentHandlerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentServiceServer).CapturePaymentHandler(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentService_CapturePaymentHandler_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentServiceServer).CapturePaymentHandler(ctx, req.(*CapturePaymentHandlerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentService_ServiceDesc is the grpc.ServiceDesc for PaymentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateCheckOutSession",
 			Handler:    _PaymentService_CreateCheckOutSession_Handler,
+		},
+		{
+			MethodName: "CapturePaymentHandler",
+			Handler:    _PaymentService_CapturePaymentHandler_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

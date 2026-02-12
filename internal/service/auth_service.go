@@ -4,15 +4,12 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"time"
 
+	authutils "ravigill/loop-auth-utils"
 	"ravigill/rider-grpc-server/internal/models"
 	"ravigill/rider-grpc-server/internal/repository"
 	"ravigill/rider-grpc-server/internal/utils"
 	pb "ravigill/rider-grpc-server/proto"
-
-	jwtlib "github.com/loop/backend/rider-auth/lib/jwt"
-	"github.com/loop/backend/rider-auth/lib/middleware"
 
 	"github.com/google/uuid"
 )
@@ -66,12 +63,12 @@ func (s *AuthService) Register(ctx context.Context, req *pb.RegisterRequest) (*p
 		return &pb.AuthResponse{Success: false, Message: "Failed to generate token", Status: 500}, nil
 	}
 
-	accessToken, err := jwtlib.GenerateToken(createdUser.Email, createdUser.ID, secretKeyForAccessToken, time.Hour*24*3) // 3 days
+	accessToken, err := authutils.CreateAccessToken(createdUser.ID, secretKeyForAccessToken) // 3 days
 	if err != nil {
 		return &pb.AuthResponse{Success: false, Message: "Failed to generate token", Status: 500}, nil
 	}
 
-	refreshToken, err := jwtlib.GenerateToken(createdUser.Email, createdUser.ID, secretKeyForRefreshToken, time.Hour*24*7) // 7 days
+	refreshToken, err := authutils.CreateRefreshToken(createdUser.ID, secretKeyForRefreshToken) // 7 days
 	if err != nil {
 		return &pb.AuthResponse{Success: false, Message: "Failed to generate token", Status: 500}, nil
 	}
@@ -115,22 +112,30 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 	}
 
 	secretKeyForAccessToken := os.Getenv("ACCESS_TOKEN_SECRET_KEY")
+	fmt.Println("here 1")
 	if secretKeyForAccessToken == "" {
+
 		return &pb.LoginResponse{Success: false, Message: "Failed to generate token", Status: 500}, nil
 	}
 
 	secretKeyForRefreshToken := os.Getenv("REFRESH_TOKEN_SECRET_KEY")
+	fmt.Println("here 2")
 	if secretKeyForRefreshToken == "" {
+
 		return &pb.LoginResponse{Success: false, Message: "Failed to generate token", Status: 500}, nil
 	}
 
-	accessToken, err := jwtlib.GenerateToken(user.Email, user.ID, secretKeyForAccessToken, time.Hour*24*3) // 3 days
+	accessToken, err := authutils.CreateAccessToken(user.ID, secretKeyForAccessToken) // 3 days
+	fmt.Println("here 1")
 	if err != nil {
+
 		return &pb.LoginResponse{Success: false, Message: "Failed to generate token", Status: 500}, nil
 	}
 
-	refreshToken, err := jwtlib.GenerateToken(user.Email, user.ID, secretKeyForRefreshToken, time.Hour*24*7) // 7 days
+	refreshToken, err := authutils.CreateRefreshToken(user.ID, secretKeyForRefreshToken) // 7 days
+	fmt.Println("here 2")
 	if err != nil {
+
 		return &pb.LoginResponse{Success: false, Message: "Failed to generate token", Status: 500}, nil
 	}
 
@@ -157,8 +162,8 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 }
 
 func (s *AuthService) GetRiderDetails(ctx context.Context, req *pb.GetRiderDetailsRequest) (*pb.GetRiderDetailsResponse, error) {
-	userID, err := middleware.GetUserIDFromContext(ctx)
-	if err != nil {
+	userID, ok := ctx.Value(authutils.Driver_id_key).(string)
+	if !ok {
 		return &pb.GetRiderDetailsResponse{Success: false, Message: "Unauthorized", Status: 401}, nil
 	}
 

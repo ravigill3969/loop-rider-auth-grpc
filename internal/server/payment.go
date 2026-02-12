@@ -43,8 +43,6 @@ func CallCreateCheckoutSession(
 	if paymentClient == nil {
 		return nil, fmt.Errorf("payment client not initialized (run NewPaymentClient)")
 	}
-	
-	
 
 	md := metadata.New(map[string]string{
 		"x-internal-token": os.Getenv("INTERNAL_SERVICE_KEY"),
@@ -73,7 +71,7 @@ func CallCreateCheckoutSession(
 
 	res, err := paymentClient.CreateCheckOutSession(ctx, req)
 
-	fmt.Println(err)
+
 	if err != nil {
 		return nil, fmt.Errorf("payment service error: %w", err)
 	}

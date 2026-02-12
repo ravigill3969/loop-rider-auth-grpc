@@ -1,14 +1,19 @@
 syntax = "proto3";
 package rider_auth;
+
 option go_package = ".;proto";
 
 service AuthService {
   rpc Register(RegisterRequest) returns (AuthResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
   rpc GetRiderDetails(GetRiderDetailsRequest) returns (GetRiderDetailsResponse);
+  
+  // rpc CancelAssignedTrip(CancelAssignedTripRequest) returns(CancelAssignedTripResponse);
 }
 
-message RegisterRequest { User user = 1; }
+message RegisterRequest {
+  User user = 1;
+}
 
 message User {
   string email = 1;
